@@ -1,0 +1,36 @@
+name: Fraud Detection MLOps CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Check Python syntax
+        run: |
+          python -m compileall -q app.py mlops/train_model.py
+
+      - name: Test model prediction
+        run: |
+          python -c "import joblib, pandas as pd; m=joblib.load('models/fraud_pipeline_v1.joblib'); cols=list(m.feature_names_in_); X=pd.DataFrame([[0]*len(cols)], columns=cols); p=m.predict(X); assert len(p)==1 and p[0] in [0,1]; print('PASS: Model prediction successful')"
+
+      - name: Build Docker image
+        run: docker build -t fraud-detection-app .
