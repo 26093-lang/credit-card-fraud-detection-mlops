@@ -1,0 +1,11 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.idea/
+.git/
+.gitignore
+logs/
+mlflow.db
+*.log
+.DS_Store

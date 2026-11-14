@@ -1,0 +1,13 @@
+@'
+.venv/
+venv/
+__pycache__/
+*.pyc
+.idea/
+logs/
+mlflow.db
+mlruns/
+data/creditcard.csv
+prediction_records.csv
+.DS_Store
+'@ | Set-Content .gitignore
